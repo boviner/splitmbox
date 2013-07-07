@@ -1,0 +1,121 @@
+This is a small PHP utility to split a Thunderbird mailbox by year, while preserving its folder organization. Usage as follows:
+
+1. Set up PHP. I'm using Uniform Server here as an example.
+> set PATH=%PATH%;c:\UniServer\usr\local\php
+
+2. Run by itself to see command-line usage.
+> php splitmbox.php
+[1373174632] Sun, 07 Jul 2013 06:23:52 +0100
+[1373174632] Running in CLI mode
+
+Usage: splitmbox.php
+  --infile <mbox file to split>       - use this option to test on single file
+  --infolder <mbox folder to split>   - use this to run on entire mailbox
+  --outfolder <output location>
+
+[1373174632] Done
+
+3. Go to your Thunderbird mailboxes
+> cd %appdata%\Thunderbird\Profiles
+> cd *.default
+> cd Mail
+> dir /b
+Local Folders
+Local Folders.msf
+pop.acmecorp.com
+
+4. Say we are going to split the contents of pop.acmecorp.com. Let's see what's inside.
+> dir /b pop.acmecorp.com
+archive
+archive.msf
+Drafts
+Drafts.msf
+filterlog.html
+Inbox
+Inbox.msf
+msgFilterRules.dat
+popstate.dat
+Sent
+Sent.msf
+subscription
+subscription.msf
+Templates.msf
+Trash
+Trash.msf
+
+5. Run it, create the output to a temporary folder. DO NOT SPECIFY THE INPUT FOLDER AS OUTPUT.
+> php splitmbox.php --infolder pop.acmecorp.com --outfolder temp
+[1373170201] Sun, 07 Jul 2013 05:10:01 +0100
+[1373170201] Running in CLI mode
+[1373170201] Processing [pop.acmecorp.com/archive]
+
+[1373170201] Creating folder [temp/2007.sbd]
+[1373170201] Creating temp/2007.sbd/archive
+...........
+[1373170202] Creating folder [temp/2008.sbd]
+[1373170202] Creating temp/2008.sbd/archive
+................................................................................
+................................................................................
+................................................................................
+............................................................
+[1373170208] Creating folder [temp/2009.sbd]
+[1373170208] Creating temp/2009.sbd/archive
+................................................................................
+................................................................................
+................................................................................
+................................................................................
+.............................................
+... snipped ...
+[1373170260] Processing [pop.acmecorp.com/Trash]
+
+[1373170260] Creating temp/2013.sbd/Trash
+....................................
+[1373170261] Creating temp/2012.sbd/Trash
+....
+[1373170261] Appending temp/2013.sbd/Trash
+................................................................................
+.........................................................................
+[1373170264] Done
+
+6. Ok it's done. Let's see what's inside.
+>dir /b temp
+2007
+2007.msf
+2007.sbd
+2008
+2008.msf
+2008.sbd
+2009
+2009.msf
+2009.sbd
+2010
+2010.msf
+2010.sbd
+2011
+2011.msf
+2011.sbd
+2012
+2012.msf
+2012.sbd
+2013.sbd
+Inbox
+Inbox.msf
+Sent
+Sent.msf
+subscription
+subscription.msf
+Trash
+Trash.msf
+
+7. Nice. Copy your message filter rules over. You _do_ have one, don't you?
+> copy pop.acmecorp.com\msgFilterRules.dat temp
+
+8. Now swap the temp and actual folder.
+> move pop.acmecorp.com pop.acmecorp.com.backup
+> move temp pop.acmecorp.com
+
+9. Cross your fingers and run Thunderbird offline to check results.
+%programfiles%\Mozilla Thunderbird\thunderbird.exe -offline
+%programfiles(x86)%\Mozilla Thunderbird\thunderbird.exe -offline for 64-bit OS
+
+
