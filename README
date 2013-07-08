@@ -1,4 +1,4 @@
-This is a small PHP utility to split a Thunderbird mailbox by year, while preserving its folder organization. Usage as follows:
+This is a small PHP utility to split a Thunderbird mailbox by year, while preserving its folder organization. Usage in Windows as follows:
 
 1. Set up PHP. I'm using Uniform Server here as an example.
 	> set PATH=%PATH%;c:\UniServer\usr\local\php
